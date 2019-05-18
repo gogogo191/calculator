@@ -10,21 +10,18 @@ let currentClicked = 'none';
 let sum = 0;
 let operand1 = 0;
 let operand2 = 0;
-let operator = 'plus';
+let operator = '+';
 
 //계산 함수
-const calculate = (operator, operand1, operand2) => {
-  if (operator === 'plus') {
-    return operand1 + operand2;
-  }
-  if (operator === 'minus') {
-    return operand1 - operand2;
-  }
-  if (operator === 'multiple') {
-    return operand1 * operand2;
-  }
-  if (operator === 'dividing') {
-    return operand1 / operand2;
+let calculate = (rator, rand1, rand2) => {
+  if (rator === '+') {
+    return rand1 + rand2;
+  } else if (rator === '-') {
+    return rand1 - rand2;
+  } else if (rator === '*') {
+    return rand1 * rand2;
+  } else if (rator === '/') {
+    return rand1 / rand2;
   }
 }
 
@@ -36,7 +33,7 @@ buttons[10].onclick = () => {
 
 //등호를 눌렀을 때
 buttons[16].onclick = () => {
-  text.innerHTML = calculate(buttons[15].innerHTML, operand1, operand2).toString();
+  text.innerHTML = calculate(operator, operand1, operand2).toString();
 }
 
 //숫자 눌렀을 때
@@ -48,6 +45,7 @@ for (let i = 0; i < 10; i++) {
 
     } else {
       text.innerHTML = buttons[i].innerHTML;
+      operand2 = Number(text.innerHTML);
       currentClicked = 'numclicked';
     }
   }
@@ -55,6 +53,13 @@ for (let i = 0; i < 10; i++) {
 
 //연산 눌렀을 때
 buttons[15].onclick = () => {
+  text.innerHTML = calculate(operator, operand1, operand2).toString();
+  operand1 = Number(text.innerHTML);
+  operator = (buttons[15].innerHTML);
+  currentClicked = 'operclicked';
+}
+
+buttons[14].onclick = () => {
   text.innerHTML = calculate(operator, operand1, operand2).toString();
   operand1 = Number(text.innerHTML);
   operator = (buttons[15].innerHTML);
