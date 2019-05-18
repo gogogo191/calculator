@@ -17,7 +17,7 @@ let calculate = (rator, rand1, rand2) => {
     return rand1 + rand2;
   } else if (rator === '-') {
     return rand1 - rand2;
-  } else if (rator === '*') {
+  } else if (rator === 'x') {
     return rand1 * rand2;
   } else if (rator === '/') {
     return rand1 / rand2;
