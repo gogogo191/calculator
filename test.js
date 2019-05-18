@@ -36,6 +36,7 @@ buttons[10].onclick = () => {
 //등호를 눌렀을 때
 buttons[16].onclick = () => {
   text.innerHTML = calculate(operator, operand1, operand2).toString();
+  currentClicked = 'equalclicked'
 }
 
 //숫자 눌렀을 때
