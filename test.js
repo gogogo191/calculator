@@ -54,11 +54,12 @@ for (let i = 0; i < 10; i++) {
 }
 
 //연산 눌렀을 때
-buttons[15].onclick = () => {
-  text.innerHTML = calculate(operator, operand1, operand2).toString();
-  operand2 = 0;
-  operand1 = Number(text.innerHTML);
-  operator = (buttons[15].innerHTML);
-  currentClicked = 'operclicked';
+for (let i = 12; i < 16; i++) {
+  buttons[i].onclick = () => {
+    text.innerHTML = calculate(operator, operand1, operand2).toString();
+    operand2 = 0;
+    operand1 = Number(text.innerHTML);
+    operator = (buttons[i].innerHTML);
+    currentClicked = 'operclicked';
+  }
 }
-
