@@ -7,7 +7,6 @@ numbers.forEach(key => {
 })
 
 let currentClicked = 'none';
-let sum = 0;
 let operand1 = 0;
 let operand2 = 0;
 let operator = '+';
@@ -28,6 +27,9 @@ let calculate = (rator, rand1, rand2) => {
 //C버튼 눌렀을 때 계산기가 켜집니다
 buttons[10].onclick = () => {
   text.innerHTML = '0';
+  operand1 = 0;
+  operand2 = 0;
+  operator = '+';
   currentClicked = 'numclicked';
 }
 
@@ -54,13 +56,7 @@ for (let i = 0; i < 10; i++) {
 //연산 눌렀을 때
 buttons[15].onclick = () => {
   text.innerHTML = calculate(operator, operand1, operand2).toString();
-  operand1 = Number(text.innerHTML);
-  operator = (buttons[15].innerHTML);
-  currentClicked = 'operclicked';
-}
-
-buttons[14].onclick = () => {
-  text.innerHTML = calculate(operator, operand1, operand2).toString();
+  operand2 = 0;
   operand1 = Number(text.innerHTML);
   operator = (buttons[15].innerHTML);
   currentClicked = 'operclicked';
