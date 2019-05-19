@@ -10,6 +10,7 @@ let currentClicked = 'none';
 let operand1 = 0;
 let operand2 = 0;
 let operator = '+';
+let textNoComma = '0'; //콤마를 제거한 숫자
 
 //계산 함수
 let calculate = (rator, rand1, rand2) => {
@@ -24,8 +25,9 @@ let calculate = (rator, rand1, rand2) => {
   }
 }
 
-//C버튼 눌렀을 때 계산기가 켜집니다
+//C버튼 눌렀을 때 
 buttons[10].onclick = () => {
+  textNoComma = '0';
   text.innerHTML = '0';
   operand1 = 0;
   operand2 = 0;
@@ -36,20 +38,27 @@ buttons[10].onclick = () => {
 //등호를 눌렀을 때
 buttons[16].onclick = () => {
   if (currentClicked === 'numclicked') {
-    text.innerHTML = calculate(operator, operand1, operand2).toString();
+    textNoComma = calculate(operator, operand1, operand2).toString();
+    text.innerHTML = comma(textNoComma);
+    currentClicked = 'equalclicked';
+  } else if (currentClicked === 'equalclicked') {
+    operand1 = Number(textNoComma);
+    textNoComma = calculate(operator, operand1, operand2).toString();
+    text.innerHTML = comma(textNoComma);
   }
 }
 
 //숫자 눌렀을 때
 for (let i = 0; i < 10; i++) {
   buttons[i].onclick = () => {
-    if ((currentClicked === 'numclicked' && text.innerHTML !== '0') || (currentClicked === 'dotclicked')) {
-      text.innerHTML += buttons[i].innerHTML;
-      operand2 = Number(text.innerHTML);
-
-    } else {
-      text.innerHTML = buttons[i].innerHTML;
-      operand2 = Number(text.innerHTML);
+    if (((currentClicked === 'numclicked' && textNoComma !== '0') || (currentClicked === 'dotclicked')) && (textNoComma.length < 11)) {
+      textNoComma += buttons[i].innerHTML;
+      text.innerHTML = comma(textNoComma);
+      operand2 = Number(textNoComma);
+    } else if (textNoComma.length < 11) {
+      textNoComma = buttons[i].innerHTML;
+      text.innerHTML = comma(textNoComma);
+      operand2 = Number(textNoComma);
       currentClicked = 'numclicked';
     }
   }
@@ -57,21 +66,32 @@ for (let i = 0; i < 10; i++) {
 
 //연산 눌렀을 때
 for (let i = 12; i < 16; i++) {
-  if (1) {
-    buttons[i].onclick = () => {
-      text.innerHTML = calculate(operator, operand1, operand2).toString();
-      operand2 = 0;
-      operand1 = Number(text.innerHTML);
+
+  buttons[i].onclick = () => {
+    if (currentClicked === 'numclicked') {
+      textNoComma = calculate(operator, operand1, operand2).toString();
+      text.innerHTML = comma(textNoComma);
+      operand1 = Number(textNoComma);
       operator = (buttons[i].innerHTML);
       currentClicked = 'operclicked';
+    } else if (currentClicked === 'operclicked') {
+      operator = buttons[i].innerHTML;
     }
   }
 }
 
 //소수점 눌렀을 때
 buttons[17].onclick = () => {
-  if (currentClicked !== 'dotclicked' && !text.innerHTML.includes('.')) {
-    text.innerHTML += buttons[17].innerHTML;
+  if (currentClicked !== 'dotclicked' && !textNoComma.includes('.')) {
+    textNoComma += buttons[17].innerHTML;
+    text.innerHTML = comma(textNoComma);
     currentClicked = 'dotclicked';
   }
 }
+
+//세자리마다 점찍기
+const comma = needComma => {
+  return Number(needComma).toLocaleString('en');
+}
+
+
