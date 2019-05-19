@@ -35,14 +35,15 @@ buttons[10].onclick = () => {
 
 //등호를 눌렀을 때
 buttons[16].onclick = () => {
-  text.innerHTML = calculate(operator, operand1, operand2).toString();
-  currentClicked = 'equalclicked'
+  if (currentClicked === 'numclicked') {
+    text.innerHTML = calculate(operator, operand1, operand2).toString();
+  }
 }
 
 //숫자 눌렀을 때
 for (let i = 0; i < 10; i++) {
   buttons[i].onclick = () => {
-    if (currentClicked === 'numclicked' && text.innerHTML !== '0') {
+    if ((currentClicked === 'numclicked' && text.innerHTML !== '0') || (currentClicked === 'dotclicked')) {
       text.innerHTML += buttons[i].innerHTML;
       operand2 = Number(text.innerHTML);
 
@@ -56,7 +57,7 @@ for (let i = 0; i < 10; i++) {
 
 //연산 눌렀을 때
 for (let i = 12; i < 16; i++) {
-  if (currentClicked = 'numclicked') {
+  if (1) {
     buttons[i].onclick = () => {
       text.innerHTML = calculate(operator, operand1, operand2).toString();
       operand2 = 0;
@@ -64,5 +65,13 @@ for (let i = 12; i < 16; i++) {
       operator = (buttons[i].innerHTML);
       currentClicked = 'operclicked';
     }
+  }
+}
+
+//소수점 눌렀을 때
+buttons[17].onclick = () => {
+  if (currentClicked !== 'dotclicked' && !text.innerHTML.includes('.')) {
+    text.innerHTML += buttons[17].innerHTML;
+    currentClicked = 'dotclicked';
   }
 }
