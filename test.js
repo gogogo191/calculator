@@ -11,6 +11,7 @@ let operand1 = 0;
 let operand2 = 0;
 let operator = 'none';
 let textNoComma = '0'; //콤마를 제거한 숫자
+let sequence = 0;
 
 //계산 함수
 let calculate = (rator, rand1, rand2) => {
@@ -43,8 +44,10 @@ buttons[16].onclick = () => {
     textNoComma = calculate(operator, operand1, operand2).toString();
     text.innerHTML = comma(textNoComma);
     currentClicked = 'equalclicked';
+    sequence = operand1;
+    operand1 = 0;
   } else if (currentClicked === 'equalclicked') {
-    operand1 = Number(textNoComma);
+    operand1 = sequence;
     textNoComma = calculate(operator, operand1, operand2).toString();
     text.innerHTML = comma(textNoComma);
   }
