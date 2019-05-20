@@ -86,6 +86,10 @@ for (let i = 12; i < 16; i++) {
       operand1 = Number(textNoComma);
       operator = buttons[i].innerHTML;
       currentClicked = 'operclicked';
+    } else if (currentClicked === 'equalclicked') {
+      operand1 = sequence;
+      operator = buttons[i].innerHTML;
+      currentClicked = 'operclicked';
     }
   }
 }
