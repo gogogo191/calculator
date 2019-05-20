@@ -41,16 +41,19 @@ buttons[10].onclick = () => {
 //등호를 눌렀을 때
 buttons[16].onclick = () => {
   if (currentClicked === 'numclicked') {
-    textNoComma = calculate(operator, operand1, operand2).toString();
+    textNoComma = limitDecimal(calculate(operator, operand1, operand2)).toString();
+
     text.innerHTML = comma(textNoComma);
     currentClicked = 'equalclicked';
+    operand1 = Number(textNoComma);
     sequence = operand2;
     operand2 = 0;
   } else if (currentClicked === 'equalclicked') {
     operand2 = sequence;
-    textNoComma = calculate(operator, operand1, operand2).toString();
+    operand1 = Number(textNoComma);
+    textNoComma = limitDecimal(calculate(operator, operand1, operand2)).toString();
     text.innerHTML = comma(textNoComma);
-    operand1 = textNoComma;
+    operand2 = 0;
   }
 }
 
@@ -60,6 +63,7 @@ for (let i = 0; i < 10; i++) {
     if (((currentClicked === 'numclicked' && textNoComma !== '0') || (currentClicked === 'dotclicked')) && (textNoComma.length < 11)) {
       textNoComma += buttons[i].innerHTML;
       text.innerHTML = comma(textNoComma);
+
       operand2 = Number(textNoComma);
       currentClicked = 'numclicked';
     } else if (textNoComma.length < 11) {
@@ -76,7 +80,8 @@ for (let i = 12; i < 16; i++) {
 
   buttons[i].onclick = () => {
     if ((currentClicked === 'numclicked' && operator !== 'none')) {
-      textNoComma = calculate(operator, operand1, operand2).toString();
+      textNoComma = limitDecimal(calculate(operator, operand1, operand2)).toString();
+
       text.innerHTML = comma(textNoComma);
       operand1 = Number(textNoComma);
       operator = (buttons[i].innerHTML);
@@ -110,6 +115,6 @@ const comma = needComma => {
 }
 
 //소수 5자리 제한
-const limitDecimal = () => {
-
+const limitDecimal = calResult => {
+  return calResult.toFixed(5).toString();
 }
