@@ -44,12 +44,13 @@ buttons[16].onclick = () => {
     textNoComma = calculate(operator, operand1, operand2).toString();
     text.innerHTML = comma(textNoComma);
     currentClicked = 'equalclicked';
-    sequence = operand1;
-    operand1 = 0;
+    sequence = operand2;
+    operand2 = 0;
   } else if (currentClicked === 'equalclicked') {
-    operand1 = sequence;
+    operand2 = sequence;
     textNoComma = calculate(operator, operand1, operand2).toString();
     text.innerHTML = comma(textNoComma);
+    operand1 = textNoComma;
   }
 }
 
