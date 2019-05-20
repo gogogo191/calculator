@@ -9,7 +9,7 @@ numbers.forEach(key => {
 let currentClicked = 'none';
 let operand1 = 0;
 let operand2 = 0;
-let operator = '+';
+let operator = 'none';
 let textNoComma = '0'; //콤마를 제거한 숫자
 
 //계산 함수
@@ -22,6 +22,8 @@ let calculate = (rator, rand1, rand2) => {
     return rand1 * rand2;
   } else if (rator === '/') {
     return rand1 / rand2;
+  } else {
+    return rand2;
   }
 }
 
@@ -31,7 +33,7 @@ buttons[10].onclick = () => {
   text.innerHTML = '0';
   operand1 = 0;
   operand2 = 0;
-  operator = '+';
+  operator = 'none';
   currentClicked = 'numclicked';
 }
 
@@ -55,6 +57,7 @@ for (let i = 0; i < 10; i++) {
       textNoComma += buttons[i].innerHTML;
       text.innerHTML = comma(textNoComma);
       operand2 = Number(textNoComma);
+      currentClicked = 'numclicked';
     } else if (textNoComma.length < 11) {
       textNoComma = buttons[i].innerHTML;
       text.innerHTML = comma(textNoComma);
@@ -68,7 +71,7 @@ for (let i = 0; i < 10; i++) {
 for (let i = 12; i < 16; i++) {
 
   buttons[i].onclick = () => {
-    if (currentClicked === 'numclicked') {
+    if ((currentClicked === 'numclicked' && operator !== 'none')) {
       textNoComma = calculate(operator, operand1, operand2).toString();
       text.innerHTML = comma(textNoComma);
       operand1 = Number(textNoComma);
@@ -76,6 +79,10 @@ for (let i = 12; i < 16; i++) {
       currentClicked = 'operclicked';
     } else if (currentClicked === 'operclicked') {
       operator = buttons[i].innerHTML;
+    } else if ((currentClicked === 'numclicked' && operator === 'none')) {
+      operand1 = Number(textNoComma);
+      operator = buttons[i].innerHTML;
+      currentClicked = 'operclicked';
     }
   }
 }
@@ -94,4 +101,7 @@ const comma = needComma => {
   return Number(needComma).toLocaleString('en');
 }
 
+//소수 5자리 제한
+const limitDecimal = () => {
 
+}
