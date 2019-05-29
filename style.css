@@ -49,6 +49,7 @@ body {
 
 
 .button {
+  user-select: none;
   border: 1px solid black;
   background-color: #373837;
   border-radius: 0.2em;
