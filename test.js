@@ -5,9 +5,10 @@ let operand1 = 0;
 let operand2 = 0;
 let operator = 'none';
 let textNoComma = '0'; //콤마를 제거한 숫자
-let textInteger = '';
-let textDecimal = '0'; //소수 부분
+let textInteger = '0';
+let textDecimal = ''; //소수 부분
 let sequence = 0;
+const MAX = 1000000000;
 
 //계산 함수
 let calculate = (rator, rand1, rand2) => {
@@ -17,8 +18,10 @@ let calculate = (rator, rand1, rand2) => {
     return rand1 - rand2;
   } else if (rator === 'x') {
     return rand1 * rand2;
-  } else if (rator === '/') {
+  } else if ((rator === '/') && (rand2 !== 0)) {
     return rand1 / rand2;
+    // } else if ((rator === '/') && (rand2 === 0)) {
+    //   console.log(error);
   } else {
     return rand2;
   }
@@ -34,7 +37,8 @@ $('#c').on('click', () => {
   currentClicked = 'none';
 })
 
-function numberWithCommas(x) {
+//세자리 수마다 콤마찍기
+function comma(x) {
   x = x.toString();
   var pattern = /(-?\d+)(\d{3})/;
   while (pattern.test(x))
@@ -42,112 +46,71 @@ function numberWithCommas(x) {
   return x;
 }
 
-// const updateDisplayValue = value => {
-//   textNoComma = value;
-//   text.innerHTML = comma(value);
-// }
+//정수부 소수부 합치기
+const sumOfResult = (integer, decimal) => {
+  return integer + '.' + decimal;
+}
+
+const updateDisplayValue = value => {
+  textNoComma = value;
+  if (!textNoComma.includes('.')) {
+    $text.html(comma(textNoComma));
+  } else {
+    $text.html(comma(textInteger) + '.' + cutDecimal(textDecimal));
+  }
+}
+
+//숫자를 눌렀을 때
+$('.number').on('click', (e) => {
+  const currentNum = Number(textNoComma);
+
+  if (currentNum >= MAX) {
+    return;
+  }
+
+  if (currentClicked === 'numClicked' && textNoComma.includes('.') && textDecimal.length < 6) {
+    textDecimal += $(e.currentTarget).html();
+    updateDisplayValue(sumOfResult(textInteger, textDecimal));
+    operand2 = Number(textNoComma);
+  } else if (currentClicked === 'numClicked' && textInteger !== '0') {
+    textInteger += $(e.currentTarget).html();
+    updateDisplayValue(textInteger);
+    operand2 = Number(textNoComma);
+  } else if (currentClicked !== 'numClicked') {
+    textInteger = $(e.currentTarget).html()
+    updateDisplayValue(textInteger);
+    operand2 = Number(textNoComma);
+  }
+
+  currentClicked = 'numClicked';
+})
+
+$('.operator').on('click', e => {
+  let calResult = 0;
+  if ((currentClicked === 'numClicked' && operator !== 'none')) {
+    calResult = calculate(operator, operand1, operand2)
+    textNoComma = calResult.toString();
+    updateDisplayValue(textNoComma);
+    operand1 = Number(textNoComma);
+    operator = $(e.currentTarget).html();
+    currentClicked = 'operClicked';
+  } else if (currentClicked === 'operClicked') {
+    operator = $(e.currentTarget).html();
+  } else if ((currentClicked === 'numClicked' && operator === 'none')) {
+    operand1 = Number(textNoComma);
+    operator = $(e.currentTarget).html();
+    currentClicked = 'operClicked';
+  } else if (currentClicked === 'equalClicked') {
+    operand1 = Number(textNoComma);
+    operator = $(e.currentTarget).html();
+    currentClicked = 'operClicked';
+  }
+})
 
 
-// //등호를 눌렀을 때
-// buttons[16].onclick = () => {
-//   if (currentClicked === 'numclicked') {
-//     const result = calculate(operator, operand1, operand2);
-//     const cut = limitDecimal(result);
 
-//     updateDisplayValue(cut);
+//등호를 눌렀을 때
 
-//     currentClicked = 'equalclicked';
-//     operand1 = Number(textNoComma);
-//     sequence = operand2;
-//     operand2 = 0;
-//   } else if (currentClicked === 'equalclicked') {
-//     const result = calculate(operator, operand1, sequence);
-//     const cut = limitDecimal(result);
+//소수점 눌렀을 때
 
-//     updateDisplayValue(cut);
-
-//     operand1 = Number(textNoComma);
-//   }
-// }
-
-// const MAX = 1000000000;
-
-// //숫자 눌렀을 때
-// for (let i = 0; i < 10; i++) {
-//   buttons[i].onclick = () => {
-//     const currentNum = Number(textNoComma);
-
-//     if (currentNum >= MAX) {
-//       return;
-//     }
-
-//     currentClicked = 'numclicked';
-
-//     if (textDecimal.includes('.') && textDecimal.length < 6) {
-//       textDecimal += buttons[i].innerHTML;
-//       operand2 = Number(textNoComma + textDecimal);
-//     }
-//     if (currentClicked === 'numclicked' && textNoComma !== '0') {
-//       const newValue = textNoComma + buttons[i].innerHTML;
-
-//       updateDisplayValue(newValue);
-
-//       operand2 = currentNum;
-//     } else if (currentClicked !== 'numclicked') {
-//       updateDisplayValue(buttons[i].innerHTML);
-
-//       operand2 = currentNum;
-//     }
-//   }
-// }
-
-// //연산 눌렀을 때
-// for (let i = 12; i < 16; i++) {
-//   buttons[i].onclick = () => {
-//     if ((currentClicked === 'numclicked' && operator !== 'none')) {
-//       textNoComma = limitDecimal(calculate(operator, operand1, operand2));
-//       text.innerHTML = comma(textNoComma);
-//       operand1 = Number(textNoComma);
-//       operator = (buttons[i].innerHTML);
-//       currentClicked = 'operclicked';
-//     } else if (currentClicked === 'operclicked') {
-//       operator = buttons[i].innerHTML;
-//     } else if ((currentClicked === 'numclicked' && operator === 'none')) {
-//       operand1 = Number(textNoComma);
-//       operator = buttons[i].innerHTML;
-//       currentClicked = 'operclicked';
-//     } else if (currentClicked === 'equalclicked') {
-//       operand1 = Number(textNoComma);
-//       operator = buttons[i].innerHTML;
-//       currentClicked = 'operclicked';
-//     }
-//   }
-// }
-
-// //소수점 눌렀을 때
-// buttons[17].onclick = () => {
-//   if (currentClicked !== 'dotclicked' && !textNoComma.includes('.')) {
-//     textDecimal = '.'
-//     currentClicked = 'dotclicked';
-//   }
-// }
-
-// //세자리마다 점찍기
-// const comma = needComma => {
-//   return Number(needComma).toLocaleString('en');
-// }
-
-// //소수 5자리 제한
-// const limitDecimal = calResult => {
-//   return calResult.toFixed(5).toString();
-// }
-
-// //소수부분 자르기
-// const cutDecimal = textInCal => {
-//   if (textInCal.includes('.')) {
-//     let deci = textInCal.split('.');
-//     return deci[1];
-//   } else {
-//     return 0;
-//   }
-// }
+//소수부분 자르기
